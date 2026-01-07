@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { dummyShowsData } from '../data/dummyShowsData'
-import { dummyDateTimeData } from '../data/dateTimeData'
 import BlurCircle from '../components/BlurCircle'
 import timeFormat from '../lib/timeFormat'
 import { StarIcon, Heart, PlayCircle } from 'lucide-react'
+import DataSelect from '../components/DataSelect'
+import { dummyDateTimeData } from '../data/dateTimeData2'
+
+
 
 const MovieDetails = () => {
   const { id } = useParams()
@@ -39,6 +42,7 @@ const MovieDetails = () => {
 
   return (
     <section className="px-6 md:px-16 lg:px-36 pt-24 pb-20">
+
       <div className="relative max-w-6xl mx-auto flex flex-col md:flex-row gap-10">
 
         {/* Poster */}
@@ -83,9 +87,12 @@ const MovieDetails = () => {
               Watch Trailer
             </button>
 
-            <button className="px-8 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium">
+            <a
+              href="#dateSelect"
+              className="px-8 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium"
+            >
               Buy Tickets
-            </button>
+            </a>
 
             <button className="flex items-center gap-2 bg-gray-700 px-4 py-3 rounded-full hover:bg-gray-600 transition">
               <Heart className="w-5 h-5" />
@@ -95,11 +102,37 @@ const MovieDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Cast Section */}
+      <p className="text-lg font-medium mt-20">
+        Your Favorite Cast
+      </p>
+
+      <div className="overflow-x-auto no-scrollbar mt-8 pb-4">
+        <div className="flex items-center gap-4 w-max px-4">
+          {movie.casts?.slice(0, 12).map((cast, index) => (
+            <div key={index} className="flex flex-col items-center text-center">
+              <img
+                src={cast.profile_path}
+                alt={cast.name}
+                className="rounded-full h-20 aspect-square object-cover"
+              />
+              <p className="font-medium text-xs mt-3">
+                {cast.name}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <DataSelect dateTime={dummyDateTimeData} />
+
     </section>
   )
 }
 
 export default MovieDetails
+
 
 
 

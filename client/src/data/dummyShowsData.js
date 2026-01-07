@@ -1,3 +1,30 @@
+const dummyCastsData = [
+  {
+    name: "Milla Jovovich",
+    profile_path: "https://image.tmdb.org/t/p/original/usWnHCzbADijULREZYSJ0qfM00y.jpg"
+  },
+  {
+    name: "Dave Bautista",
+    profile_path: "https://image.tmdb.org/t/p/original/snk6JiXOOoRjPtHU5VMoy6qbd32.jpg"
+  },
+  {
+    name: "Arly Jover",
+    profile_path: "https://image.tmdb.org/t/p/original/zmznPrQ9GSZwcOIUT0c3GyETwrP.jpg"
+  },
+  {
+    name: "Amara Okereke",
+    profile_path: "https://image.tmdb.org/t/p/original/nTSPtzWu6deZTJtWXHUpACVznY4.jpg"
+  },
+  {
+    name: "Fraser James",
+    profile_path: "https://image.tmdb.org/t/p/original/mGAPQG2OKTgdKFkp9YpvCSqcbgY.jpg"
+  },
+  {
+    name: "Eveline Hall",
+    profile_path: "https://image.tmdb.org/t/p/original/lJm89neuiVlYISEqNpGZA5kTAnP.jpg"
+  }
+]
+
 export const dummyShowsData = [
   {
     id: 19995,
@@ -8,6 +35,7 @@ export const dummyShowsData = [
     genres: [{ name: "Action" }, { name: "Sci-Fi" }],
     runtime: 162,
     vote_average: 7.6,
+    casts: dummyCastsData
   },
   {
     id: 157336,
@@ -18,6 +46,7 @@ export const dummyShowsData = [
     genres: [{ name: "Adventure" }, { name: "Drama" }],
     runtime: 169,
     vote_average: 8.6,
+    casts: dummyCastsData
   },
   {
     id: 27205,
@@ -28,6 +57,7 @@ export const dummyShowsData = [
     genres: [{ name: "Action" }, { name: "Thriller" }],
     runtime: 148,
     vote_average: 8.4,
+    casts: dummyCastsData
   },
   {
     id: 155,
@@ -38,6 +68,7 @@ export const dummyShowsData = [
     genres: [{ name: "Crime" }, { name: "Drama" }],
     runtime: 152,
     vote_average: 9.0,
+    casts: dummyCastsData
   },
 ]
 
