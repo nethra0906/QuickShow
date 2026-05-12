@@ -6,27 +6,39 @@ import toast from 'react-hot-toast'
 
 const DataSelect = ({ dateTime, movieId }) => {
   const navigate = useNavigate()
+
   const [selectedDate, setSelectedDate] = useState(dateTime[0]?.date)
 
+  const [selectedTime, setSelectedTime] = useState(
+    dateTime[0]?.shows[0]?.time
+  )
+
+  const currentShows =
+    dateTime.find(day => day.date === selectedDate)?.shows || []
+
   const onBookHandler = () => {
-    if (!selectedDate) {
-      toast.error('Please select a date')
+    if (!selectedDate || !selectedTime) {
+      toast.error('Please select date and time')
       return
     }
 
-    navigate(`/movies/${movieId}/date`)
+    navigate(
+      `/movies/${movieId}/date?date=${selectedDate}&time=${selectedTime}`
+    )
+
     window.scrollTo(0, 0)
   }
 
   return (
     <div id="dateSelect" className="pt-24">
-      <div className="relative flex flex-col md:flex-row items-center justify-between gap-10 p-8 bg-primary/10 border border-primary/20 rounded-lg overflow-hidden">
+      <div className="relative flex flex-col gap-10 p-8 bg-primary/10 border border-primary/20 rounded-2xl overflow-hidden">
 
         {/* Blur Effects */}
         <BlurCircle top="-100px" left="-100px" />
         <BlurCircle top="100px" right="-50px" />
 
-        <div className="w-full">
+        {/* Date Section */}
+        <div>
           <p className="text-lg font-semibold">
             Choose Date
           </p>
@@ -42,19 +54,25 @@ const DataSelect = ({ dateTime, movieId }) => {
                 return (
                   <button
                     key={day.date}
-                    onClick={() => setSelectedDate(day.date)}
-                    className={`flex flex-col items-center justify-center h-14 w-14 rounded-md transition
+                    onClick={() => {
+                      setSelectedDate(day.date)
+                      setSelectedTime(day.shows[0]?.time)
+                    }}
+                    className={`flex flex-col items-center justify-center h-16 w-16 rounded-lg transition
                       ${
                         selectedDate === day.date
                           ? 'bg-primary text-white'
                           : 'bg-primary/20 hover:bg-primary/30'
                       }`}
                   >
-                    <span className="font-medium">
+                    <span className="font-semibold text-base">
                       {dateObj.getDate()}
                     </span>
+
                     <span className="text-xs uppercase">
-                      {dateObj.toLocaleDateString('en-US', { month: 'short' })}
+                      {dateObj.toLocaleDateString('en-US', {
+                        month: 'short',
+                      })}
                     </span>
                   </button>
                 )
@@ -65,9 +83,34 @@ const DataSelect = ({ dateTime, movieId }) => {
           </div>
         </div>
 
+        {/* Time Section */}
+        <div>
+          <p className="text-lg font-semibold">
+            Choose Time
+          </p>
+
+          <div className="flex flex-wrap gap-4 mt-5">
+            {currentShows.map(show => (
+              <button
+                key={show.id}
+                onClick={() => setSelectedTime(show.time)}
+                className={`px-5 py-2 rounded-lg text-sm transition
+                  ${
+                    selectedTime === show.time
+                      ? 'bg-primary text-white'
+                      : 'bg-primary/20 hover:bg-primary/30'
+                  }`}
+              >
+                {show.time}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
         <button
           onClick={onBookHandler}
-          className="bg-primary text-white px-8 py-2 mt-6 rounded hover:bg-primary/90 transition-all cursor-pointer"
+          className="self-start bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-all cursor-pointer"
         >
           Book Now
         </button>
@@ -78,4 +121,3 @@ const DataSelect = ({ dateTime, movieId }) => {
 }
 
 export default DataSelect
-
