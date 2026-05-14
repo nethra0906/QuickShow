@@ -193,8 +193,28 @@ export const dummyShowsData = [
         "vote_average": 7.443,
         "vote_count": 23569,
         "runtime": 127,
+    },
+    {
+        "_id": "299536",
+        "id": 299536,
+        "title": "Captain America: Brave New World",
+        "overview": "After meeting with newly elected U.S. President Thaddeus Ross, Sam Wilson finds himself in the middle of an international incident. He must discover the reason behind a nefarious global plot before the true mastermind has the entire world seeing red.",
+        "poster_path": "https://image.tmdb.org/t/p/original/v997tx6w3CuFv099Gv09GoCSpis.jpg",
+        "backdrop_path": "https://image.tmdb.org/t/p/original/scidbXbS1h23Sscg183HssWw0gS.jpg",
+        "genres": [
+            { "id": 28, "name": "Action" },
+            { "id": 12, "name": "Adventure" },
+            { "id": 53, "name": "Thriller" }
+        ],
+        "casts": dummyCastsData,
+        "release_date": "2025-02-14",
+        "original_language": "en",
+        "tagline": "Enter a brave new world.",
+        "vote_average": 7.2,
+        "vote_count": 14200,
+        "runtime": 118,
     }
-]
+];
 
 export const dummyDateTimeData = {
     "2025-07-24": [
