@@ -4,19 +4,11 @@ import Loading from '../../components/Loading'
 import BlurCircle from '../../components/BlurCircle'
 import { DollarSign, Ticket, Film, Users } from 'lucide-react'
 
-// Safer asset import strategy
+// Safe asset import matching your directory structures
 import * as AssetsModule from '../../assets/assets'
 
 const Dashboard = () => {
-  // CRASH PROTECTION: Fallback gracefully if Vite env strings aren't parsing
-  let currency = '$';
-  try {
-    if (import.meta && import.meta.env && import.meta.env.VITE_CURRENCY) {
-      currency = import.meta.env.VITE_CURRENCY;
-    }
-  } catch (e) {
-    console.warn("Vite environment meta context not found, defaulting to fallback currency ($).");
-  }
+  const currency = import.meta.env.VITE_CURRENCY || '$'
 
   const [dashboardData, setDashboardData] = useState({
     totalRevenue: 0,
@@ -29,17 +21,19 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // CRASH PROTECTION: Safe extraction of dummy data parameters
       const localData = AssetsModule.dummyDashboardData || {};
       
+      // Rectifying data mapping logic
       setDashboardData({
         totalRevenue: localData.totalRevenue ?? 0,
         totalBookings: localData.totalBookings ?? 0,
-        activeShows: localData.activeShows ?? 0,
-        totalUsers: localData.totalUsers ?? 0,
+        // FIX 1: Read the length of the activeShows array safely
+        activeShows: Array.isArray(localData.activeShows) ? localData.activeShows.length : 0,
+        // FIX 2: Map singular data token 'totalUser' to the component's state metric
+        totalUsers: localData.totalUser ?? 0,
       });
     } catch (error) {
-      console.error("Error setting dashboard data structure:", error);
+      console.error("Error setting dashboard metrics:", error);
     } finally {
       setLoading(false);
     }
@@ -49,35 +43,28 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [])
 
-  // Safely format metrics value maps
-  const formatValue = (key, val) => {
-    if (typeof val !== 'number') return '0';
-    if (key === 'revenue') return `${currency}${val.toLocaleString()}`;
-    return val.toLocaleString();
-  };
-
   const dashboardCards = [
     { 
       title: 'Total Revenue', 
-      value: formatValue('revenue', dashboardData.totalRevenue), 
+      value: `${currency}${dashboardData.totalRevenue.toLocaleString()}`, 
       icon: DollarSign, 
       color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' 
     },
     { 
       title: 'Total Bookings', 
-      value: formatValue('bookings', dashboardData.totalBookings), 
+      value: dashboardData.totalBookings.toLocaleString(), 
       icon: Ticket, 
       color: 'text-[#FF4D67] bg-[#FF4D67]/10 border-[#FF4D67]/20' 
     },
     { 
       title: 'Active Shows', 
-      value: formatValue('shows', dashboardData.activeShows), 
+      value: dashboardData.activeShows.toLocaleString(), 
       icon: Film, 
       color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' 
     },
     { 
       title: 'Total Users', 
-      value: formatValue('users', dashboardData.totalUsers), 
+      value: dashboardData.totalUsers.toLocaleString(), 
       icon: Users, 
       color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' 
     },
@@ -93,13 +80,14 @@ const Dashboard = () => {
       
       <Title text1="Admin" text2="Dashboard" />
 
+      {/* Global 4-column metrics layout engine */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 w-full relative z-10">
         {dashboardCards.map((card, index) => {
           const IconComponent = card.icon;
           return (
             <div 
               key={index} 
-              className="flex items-center justify-between p-6 bg-[#1A1015]/40 backdrop-blur-xl border border-white/5 rounded-2xl"
+              className="flex items-center justify-between p-6 bg-[#1A1015]/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-lg transition-all hover:-translate-y-0.5"
             >
               <div className="space-y-2">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
