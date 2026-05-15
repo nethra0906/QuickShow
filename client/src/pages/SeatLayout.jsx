@@ -79,7 +79,7 @@ const SeatLayout = () => {
 
       <div className='flex flex-col lg:flex-row gap-10'>
         
-        {/* LEFT PANEL - TIMINGS */}
+        
         <div className='lg:w-72 w-full'>
           <div className='bg-[#1A1015] border border-[#FF4D67]/20 rounded-2xl p-6 sticky top-28'>
             <h2 className='text-2xl font-bold mb-6'>Available Timings</h2>
@@ -105,7 +105,6 @@ const SeatLayout = () => {
           </div>
         </div>
 
-        {/* RIGHT SECTION - SEAT LAYOUT */}
         <div className='flex-1 flex flex-col items-center'>
           
           <div className='mb-10 w-full'>
@@ -119,16 +118,14 @@ const SeatLayout = () => {
             <p className='text-gray-500 text-[10px] tracking-[0.5em] uppercase font-bold'>SCREEN SIDE</p>
           </div>
 
-          {/* THEATER GRID */}
+          
           <div className='flex flex-col gap-8 select-none'>
-            
-            {/* BLOCK 1: TOP (A & B) */}
+           
             <div className='flex flex-col gap-2 items-center'>
               {renderSeatBlock('A', 1, 9)}
               {renderSeatBlock('B', 1, 9)}
             </div>
 
-            {/* BLOCK 2: MIDDLE (C, D vs E, F) */}
             <div className='flex flex-col gap-2'>
               <div className='flex gap-8 md:gap-12'>
                 <div className='flex flex-col gap-2'>
@@ -142,7 +139,7 @@ const SeatLayout = () => {
               </div>
             </div>
 
-            {/* BLOCK 3: BOTTOM (G, H vs I, J) */}
+
             <div className='flex flex-col gap-2'>
               <div className='flex gap-8 md:gap-12'>
                 <div className='flex flex-col gap-2'>
@@ -158,7 +155,6 @@ const SeatLayout = () => {
 
           </div>
 
-          {/* PROCEED BUTTON */}
           <div className='mt-16 w-full flex justify-center pb-10'>
             <button onClick={()=> navigate('/my-bookings')}className='bg-[#FF4D67] hover:bg-[#e63e58] text-white px-14 py-4 rounded-full flex items-center gap-3 font-bold transition-all active:scale-95 shadow-xl shadow-[#FF4D67]/30'>
               Proceed to checkout

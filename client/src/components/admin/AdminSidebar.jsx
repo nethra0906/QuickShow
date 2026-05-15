@@ -20,7 +20,6 @@ const AdminSidebar = () => {
   return (
     <div className='h-[calc(100vh-64px)] flex flex-col items-center pt-8 max-w-[68px] md:max-w-[240px] w-full border-r border-white/5 bg-[#1A1015]/30 backdrop-blur-xl text-sm transition-all duration-300'>
       
-      {/* User Profile Section */}
       <div className='flex flex-col items-center w-full px-3 mb-8 border-b border-white/5 pb-6'>
         <div className='relative group'>
           <div className='absolute -inset-0.5 bg-[#FF4D67] rounded-full opacity-30 blur group-hover:opacity-60 transition duration-300'></div>
@@ -38,13 +37,12 @@ const AdminSidebar = () => {
         </p>
       </div>
 
-      {/* Navigation Links */}
       <div className='w-full px-2 space-y-1.5 flex-1'>
         {adminNavLinks.map((link) => (
           <NavLink
             key={link.path}
             to={link.path}
-            end={link.path === '/admin'} // Ensures exact matching for the root admin path
+            end={link.path === '/admin'} 
             className={({ isActive }) => `
               relative flex items-center justify-center md:justify-start gap-3 w-full py-3 px-3 md:pl-6 rounded-xl font-medium transition-all duration-200 group
               ${isActive 
@@ -54,16 +52,12 @@ const AdminSidebar = () => {
           >
             {({ isActive }) => (
               <>
-                {/* Active Glow Accent Indicator */}
                 <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-md transition-all duration-200 ${isActive ? 'bg-[#FF4D67] shadow-[0_0_8px_#FF4D67]' : 'bg-transparent'}`}></span>
                 
-                {/* Icon */}
                 <link.icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-105 shrink-0 ${isActive ? 'text-[#FF4D67]' : 'text-white/40 group-hover:text-white/70'}`} />
-                
-                {/* Label */}
+              
                 <p className='max-md:hidden tracking-wide'>{link.name}</p>
                 
-                {/* Desktop Micro-Indicator Dot */}
                 {isActive && (
                   <span className="absolute right-4 w-1 h-1 rounded-full bg-[#FF4D67]/70 max-md:hidden animate-pulse"></span>
                 )}

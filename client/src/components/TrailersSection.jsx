@@ -15,13 +15,11 @@ const TrailersSection = () => {
 
       <div className="relative mt-6 max-w-[960px] mx-auto">
 
-        {/* RIGHT BLUR */}
         <BlurCircle
           top="50%"
           right="-220px"
         />
 
-        {/* MAIN TRAILER */}
         <div className="relative z-10 aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl">
           <iframe
             src={`https://www.youtube.com/embed/${currentTrailer.id}?rel=0&modestbranding=1`}
@@ -32,7 +30,7 @@ const TrailersSection = () => {
           />
         </div>
 
-        {/* THUMBNAILS */}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-8 max-w-3xl mx-auto">
           {dummyTrailers.map(trailer => (
             <div

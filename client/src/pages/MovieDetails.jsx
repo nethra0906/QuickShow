@@ -36,15 +36,12 @@ const MovieDetails = () => {
 
   return (
     <section className="relative px-6 md:px-16 lg:px-24 xl:px-32 pt-32 pb-24 bg-black text-white overflow-hidden min-h-screen">
-      
-      {/* BRAND GLOW ACCENTS */}
+ 
       <BlurCircle top="5%" left="-100px" color="bg-[#FF4D67]/10" />
       <BlurCircle top="40%" right="-150px" color="bg-[#FF4D67]/5" />
 
-      {/* MAIN HERO CARD SECTION */}
       <div className="relative max-w-7xl mx-auto bg-[#1A1015]/40 border border-white/5 backdrop-blur-xl rounded-3xl p-6 md:p-10 flex flex-col md:flex-row gap-10 items-center md:items-stretch z-10">
         
-        {/* POSTER WITH PREMIUM HOVER EFFECTS */}
         <div className="w-64 md:w-72 shrink-0 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/80 group relative">
           <img
             src={movie.poster_path}
@@ -56,7 +53,6 @@ const MovieDetails = () => {
           </div>
         </div>
 
-        {/* METADATA DETAILS */}
         <div className="flex flex-col justify-between flex-1 py-2">
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-3">
@@ -72,7 +68,6 @@ const MovieDetails = () => {
               {movie.title}
             </h1>
 
-            {/* STAR USER RATING BAR */}
             <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg w-fit border border-white/5">
               <StarIcon className="w-4 h-4 text-[#FF4D67] fill-[#FF4D67]" />
               <span className="text-sm font-bold text-white">
@@ -91,7 +86,6 @@ const MovieDetails = () => {
             </p>
           </div>
 
-          {/* ACTION TOOLBAR BUTTONS */}
           <div className="flex flex-wrap items-center gap-4 mt-8 pt-6 border-t border-white/5">
             <button className="flex items-center gap-2 px-6 py-3 text-sm bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-white font-bold transition-all duration-300 rounded-full active:scale-95">
               <PlayCircle className="w-4 h-4 text-[#FF4D67]" />
@@ -122,7 +116,6 @@ const MovieDetails = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* CAST SCROLL SECTION */}
         <div className="mt-20">
           <h2 className="text-xl font-black uppercase tracking-wider text-gray-400 border-b border-white/5 pb-3">
             Your Favorite Cast
@@ -151,7 +144,6 @@ const MovieDetails = () => {
           </div>
         </div>
 
-        {/* DATE SELECTION WIDGET CONTAINER */}
         <div id="dateSelect" className="mt-16 scroll-mt-28">
           <DataSelect
             dateTime={dummyDateTimeData}
@@ -159,7 +151,6 @@ const MovieDetails = () => {
           />
         </div>
 
-        {/* RESTRUCTURED ALIGNED RECOMMENDATIONS GRID */}
         <div className="mt-24">
           <div className="mb-10 border-b border-white/5 pb-3">
             <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
@@ -176,7 +167,6 @@ const MovieDetails = () => {
           </div>
         </div>
 
-        {/* EXPLORE MORE BUTTON */}
         <div className="flex justify-center mt-16">
           <button
             onClick={() => {

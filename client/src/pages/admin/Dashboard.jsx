@@ -3,8 +3,6 @@ import Title from '../../components/admin/Title'
 import Loading from '../../components/Loading'
 import BlurCircle from '../../components/BlurCircle'
 import { DollarSign, Ticket, Film, Users } from 'lucide-react'
-
-// Safe asset import matching your directory structures
 import * as AssetsModule from '../../assets/assets'
 
 const Dashboard = () => {
@@ -23,13 +21,10 @@ const Dashboard = () => {
     try {
       const localData = AssetsModule.dummyDashboardData || {};
       
-      // Rectifying data mapping logic
       setDashboardData({
         totalRevenue: localData.totalRevenue ?? 0,
         totalBookings: localData.totalBookings ?? 0,
-        // FIX 1: Read the length of the activeShows array safely
         activeShows: Array.isArray(localData.activeShows) ? localData.activeShows.length : 0,
-        // FIX 2: Map singular data token 'totalUser' to the component's state metric
         totalUsers: localData.totalUser ?? 0,
       });
     } catch (error) {
@@ -80,7 +75,6 @@ const Dashboard = () => {
       
       <Title text1="Admin" text2="Dashboard" />
 
-      {/* Global 4-column metrics layout engine */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 w-full relative z-10">
         {dashboardCards.map((card, index) => {
           const IconComponent = card.icon;

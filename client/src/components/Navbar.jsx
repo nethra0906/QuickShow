@@ -15,12 +15,11 @@ const Navbar = () => {
   <div className="fixed top-0 left-0 z-50 w-full flex items-center justify-between px-6 md:px-16 lg:px-36 py-6 bg-transparent">
 
 
-  {/* Logo */}
   <Link to="/" className="flex items-center">
     <img src={assets.logo} alt="Logo" className="w-36 h-auto" />
   </Link>
 
-  {/* Center Pill Navbar */}
+
   <div
     className={`
       fixed md:absolute md:left-1/2 md:-translate-x-1/2
@@ -71,7 +70,6 @@ const Navbar = () => {
     ))}
   </div>
 
-  {/* Right Icons */}
   <div className="flex items-center gap-6">
     <SearchIcon className="max-md:hidden w-5 h-5 cursor-pointer" />
 
@@ -95,7 +93,6 @@ const Navbar = () => {
     )}
   </div>
 
-  {/* Mobile Menu Icon */}
   <MenuIcon
     onClick={() => setOpen(true)}
     className="md:hidden ml-4 w-8 h-8 cursor-pointer"

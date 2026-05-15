@@ -33,11 +33,10 @@ const DataSelect = ({ dateTime, movieId }) => {
     <div id="dateSelect" className="pt-24">
       <div className="relative flex flex-col gap-10 p-8 bg-primary/10 border border-primary/20 rounded-2xl overflow-hidden">
 
-        {/* Blur Effects */}
         <BlurCircle top="-100px" left="-100px" />
         <BlurCircle top="100px" right="-50px" />
 
-        {/* Date Section */}
+  
         <div>
           <p className="text-lg font-semibold">
             Choose Date
@@ -83,7 +82,6 @@ const DataSelect = ({ dateTime, movieId }) => {
           </div>
         </div>
 
-        {/* Time Section */}
         <div>
           <p className="text-lg font-semibold">
             Choose Time
@@ -107,7 +105,6 @@ const DataSelect = ({ dateTime, movieId }) => {
           </div>
         </div>
 
-        {/* CTA */}
         <button
           onClick={onBookHandler}
           className="self-start bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-all cursor-pointer"

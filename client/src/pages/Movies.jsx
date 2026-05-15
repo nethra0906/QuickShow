@@ -7,13 +7,12 @@ const Movies = () => {
   return dummyShowsData.length > 0 ? (
     <div className="relative pt-32 pb-24 px-6 md:px-12 lg:px-24 xl:px-32 bg-black min-h-screen text-white overflow-hidden">
       
-      {/* BRAND GLOW ACCENTS */}
+
       <BlurCircle top="10%" left="-100px" color="bg-[#FF4D67]/10" />
       <BlurCircle bottom="10%" right="-100px" color="bg-[#FF4D67]/5" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* DESIGNER PAGE HEADER */}
         <div className="mb-12 border-b border-white/5 pb-4">
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl text-white">
             Now Showing
@@ -23,7 +22,7 @@ const Movies = () => {
           </p>
         </div>
 
-        {/* RESTRUCTURED ALIGNED MOVIE CARD GRID */}
+      
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8 justify-items-center">
           {dummyShowsData.map(movie => (
             <div key={movie.id} className="w-full transform transition-all duration-300 hover:-translate-y-2">

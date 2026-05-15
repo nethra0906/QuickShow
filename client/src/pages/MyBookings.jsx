@@ -26,14 +26,14 @@ const MyBookings = () => {
       <div className='max-w-7xl mx-auto relative z-10'>
         <h1 className='text-3xl font-bold mb-8 tracking-tight'>My Bookings</h1>
 
-        {/* CHANGED FROM FLEX TO RESPONSIVE MULTI-COLUMN GRID */}
+        
         <div className='grid grid-cols-1 xl:grid-cols-2 gap-6 w-full'>
           {bookings.map((item, index) => (
             <div 
               key={index} 
               className='flex flex-col sm:flex-row bg-[#1A1015]/60 border border-[#FF4D67]/10 rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-300 hover:border-[#FF4D67]/40 hover:shadow-xl hover:shadow-[#FF4D67]/5'
             >
-              {/* COMPACT IMAGE BLOCK */}
+              
               <div className='w-full sm:w-40 md:w-44 shrink-0 aspect-[2/3] sm:aspect-auto'>
                 <img 
                   src={item.show.movie.poster_path} 
@@ -42,10 +42,10 @@ const MyBookings = () => {
                 />
               </div>
 
-              {/* DETAILS AND METRICS WRAPPER */}
+             
               <div className='flex flex-col sm:flex-row flex-1 p-5 gap-4 justify-between'>
                 
-                {/* LEFT CONTENT: MOVIE META */}
+               
                 <div className='flex flex-col justify-between gap-4'>
                   <div>
                     <h2 className='text-xl font-bold text-white tracking-tight leading-tight'>{item.show.movie.title}</h2>
@@ -67,7 +67,6 @@ const MyBookings = () => {
                   </div>
                 </div>
 
-                {/* RIGHT CONTENT: PRICING & SEATS */}
                 <div className='flex flex-col justify-between items-start sm:items-end text-left sm:text-right gap-4 border-t sm:border-t-0 sm:border-l border-white/10 pt-4 sm:pt-0 sm:pl-4 shrink-0 min-w-[140px]'>
                   <div className='w-full'>
                     <div className='flex sm:flex-col items-center sm:items-end gap-3 sm:gap-1.5 justify-between'>

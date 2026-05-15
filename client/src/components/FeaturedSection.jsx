@@ -11,11 +11,9 @@ const FeaturedSection = () => {
   return (
     <section className="relative px-6 md:px-16 lg:px-24 xl:px-32 py-24 bg-black overflow-hidden text-white">
       
-      {/* RICH BACKGROUND GLOW EFFECTS */}
       <BlurCircle top="10%" left="-150px" color="bg-[#FF4D67]/10" />
       <BlurCircle bottom="10%" right="-150px" color="bg-[#FF4D67]/5" />
 
-      {/* SECTION HEADER BLOCK */}
       <div className="relative z-10 max-w-7xl mx-auto flex items-end justify-between mb-12 border-b border-white/5 pb-4">
         <div>
           <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
@@ -35,7 +33,6 @@ const FeaturedSection = () => {
         </button>
       </div>
 
-      {/* RENDER GRID COMPONENT (FIXES THE STRAGGLED 4TH CARD) */}
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8 justify-items-center">
           {dummyShowsData.slice(0, 4).map(movie => (
@@ -46,7 +43,6 @@ const FeaturedSection = () => {
         </div>
       </div>
 
-      {/* BOTTOM SHOW MORE CTA BUTTON */}
       <div className="flex justify-center mt-16 relative z-10">
         <button
           onClick={() => {
