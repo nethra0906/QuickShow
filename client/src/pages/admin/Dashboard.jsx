@@ -50,7 +50,6 @@ const Dashboard = () => {
       <BlurCircle top="-60px" left="-20px" />
       <Title text1="Admin" text2="Dashboard" />
 
-      {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 w-full relative z-10">
         {dashboardCards.map((card, index) => {
           const IconComponent = card.icon
@@ -73,7 +72,6 @@ const Dashboard = () => {
         <p className="text-xs text-white/40 mt-1">Currently scheduled feature movies in local theaters</p>
       </div>
 
-      {/* Dynamic Posters Layout Grid */}
       <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full z-10">
         <BlurCircle top="100px" right="-10%" />
         {dashboardData.activeShows.map((show) => {
