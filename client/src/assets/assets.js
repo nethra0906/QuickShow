@@ -55,71 +55,88 @@ const dummyCastsData = [
 
 export const dummyShowsData = [
   {
-    "_id": "324544",
-    "id": 324544,
-    "title": "In the Lost Lands",
-    "overview": "A queen sends the powerful and feared sorceress Gray Alys to the ghostly wilderness...",
-    "poster_path": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=500&q=80",
-    "genres": [{ "id": 28, "name": "Action" }],
-    "vote_average": 6.4,
-    "showPrice": 59,
-    "showDateTime": "2025-06-30T02:30:00.000Z"
+    _id: "324544",
+    id: 324544,
+    title: "In the Lost Lands",
+    overview:
+      "A queen sends the feared sorceress Gray Alys to the ghostly wilderness.",
+    poster_path:
+      "https://image.tmdb.org/t/p/w500/dDlfjR7gllmr8HTeN6rfrYhTdwX.jpg",
+    genres: [{ id: 28, name: "Action" }],
+    vote_average: 6.4,
+    showPrice: 59,
+    showDateTime: "2025-06-30T02:30:00",
   },
+
   {
-    "_id": "1232546",
-    "id": 1232546,
-    "title": "Until Dawn",
-    "overview": "One year after her sister Melanie mysteriously disappeared...",
-    "poster_path": "https://images.unsplash.com/photo-1505635552518-3448ff116af3?auto=format&fit=crop&w=500&q=80",
-    "genres": [{ "id": 27, "name": "Horror" }],
-    "vote_average": 6.4,
-    "showPrice": 81,
-    "showDateTime": "2025-06-30T15:30:00.000Z"
+    _id: "1232546",
+    id: 1232546,
+    title: "Until Dawn",
+    overview:
+      "One year after her sister mysteriously disappeared.",
+    poster_path:
+      "https://image.tmdb.org/t/p/w500/6O9nkcmZBymDXtxOGJmulqcxJdv.jpg",
+    genres: [{ id: 27, name: "Horror" }],
+    vote_average: 6.4,
+    showPrice: 81,
+    showDateTime: "2025-06-30T15:30:00",
   },
+
   {
-    "_id": "552524",
-    "id": 552524,
-    "title": "Lilo & Stitch",
-    "overview": "The wildly funny and touching story of a lonely Hawaiian girl...",
-    "poster_path": "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?auto=format&fit=crop&w=500&q=80",
-    "genres": [{ "id": 10751, "name": "Family" }],
-    "vote_average": 7.1,
-    "showPrice": 81,
-    "showDateTime": "2025-06-30T03:30:00.000Z"
+    _id: "552524",
+    id: 552524,
+    title: "Lilo & Stitch",
+    overview:
+      "The touching story of a lonely Hawaiian girl and her alien friend.",
+    poster_path:
+      "https://image.tmdb.org/t/p/w500/mKKqV23MQ0uakJS8OCE2TfV5jNS.jpg",
+    genres: [{ id: 10751, name: "Family" }],
+    vote_average: 7.1,
+    showPrice: 81,
+    showDateTime: "2025-06-30T03:30:00",
   },
+
   {
-    "_id": "668489",
-    "id": 668489,
-    "title": "Havoc",
-    "overview": "When a drug heist swerves lethally out of control...",
-    "poster_path": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
-    "genres": [{ "id": 28, "name": "Action" }],
-    "vote_average": 6.5,
-    "showPrice": 81,
-    "showDateTime": "2025-07-15T16:30:00.000Z"
+    _id: "668489",
+    id: 668489,
+    title: "Havoc",
+    overview:
+      "A detective fights through the criminal underworld.",
+    poster_path:
+      "https://image.tmdb.org/t/p/w500/r46leE6PSzLR3pnVzaxx5Q30yUF.jpg",
+    genres: [{ id: 28, name: "Action" }],
+    vote_average: 6.5,
+    showPrice: 81,
+    showDateTime: "2025-07-15T16:30:00",
   },
+
   {
-    "_id": "950387",
-    "id": 950387,
-    "title": "A Minecraft Movie",
-    "overview": "Four misfits find themselves struggling with ordinary problems...",
-    "poster_path": "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=500&q=80",
-    "genres": [{ "id": 12, "name": "Adventure" }],
-    "vote_average": 6.5,
-    "showPrice": 49,
-    "showDateTime": "2025-06-05T15:30:00.000Z"
+    _id: "950387",
+    id: 950387,
+    title: "A Minecraft Movie",
+    overview:
+      "Four misfits find themselves in a mysterious cubic world.",
+    poster_path:
+      "https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
+    genres: [{ id: 12, name: "Adventure" }],
+    vote_average: 6.5,
+    showPrice: 49,
+    showDateTime: "2025-06-05T15:30:00",
   },
+
   {
-    "_id": "575265",
-    "id": 575265,
-    "title": "Mission: Impossible",
-    "overview": "Ethan Hunt and team continue their search...",
-    "poster_path": "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=500&q=80",
-    "genres": [{ "id": 28, "name": "Action" }],
-    "vote_average": 7.0,
-    "showPrice": 79,
-    "showDateTime": "2025-06-20T16:00:00.000Z"
-  }
+    _id: "575265",
+    id: 575265,
+    title: "Mission Impossible",
+    overview:
+      "Ethan Hunt continues his most dangerous mission yet.",
+    poster_path:
+      "https://image.tmdb.org/t/p/w500/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
+    genres: [{ id: 28, name: "Action" }],
+    vote_average: 7.0,
+    showPrice: 79,
+    showDateTime: "2025-06-20T16:00:00",
+  },
 ];
 
 export const dummyDateTimeData = {

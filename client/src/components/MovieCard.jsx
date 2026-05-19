@@ -1,61 +1,70 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { StarIcon } from 'lucide-react'
-import timeFormat from '../lib/timeFormat'
+import React from "react";
+import { StarIcon } from "lucide-react";
 
 const MovieCard = ({ movie }) => {
-  const navigate = useNavigate()
 
-  const imageUrl = movie.poster_path?.startsWith('http')
-    ? movie.poster_path
-    : `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
 
-  const handleNavigate = () => {
-    navigate(`/movies/${movie.id}`)
-    window.scrollTo(0, 0)
-  }
+    if (isNaN(date.getTime())) return "Coming Soon";
+
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const image =
+    movie.poster_path ||
+    "https://via.placeholder.com/500x750?text=Movie";
 
   return (
-    <div
-      className="flex flex-col justify-between p-4 bg-gray-800 rounded-2xl
-                 hover:-translate-y-1 transition duration-300 w-64"
-    >
+    <div className="bg-[#1B2433] rounded-3xl overflow-hidden p-5 w-full max-w-[320px] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/10">
+      
+      {/* Movie Poster */}
       <img
-        onClick={handleNavigate}
-        src={imageUrl}
+        src={image}
         alt={movie.title}
-        className="rounded-xl h-72 w-full object-cover cursor-pointer"
+        className="w-full h-[380px] object-cover rounded-2xl"
+        onError={(e) => {
+          e.target.src =
+            "https://via.placeholder.com/500x750?text=No+Poster";
+        }}
       />
 
-      <div className="mt-3">
-        <p className="font-semibold truncate">
+      {/* Movie Info */}
+      <div className="mt-5">
+        
+        <h2 className="text-white text-2xl font-bold line-clamp-1">
           {movie.title}
+        </h2>
+
+        <p className="text-gray-400 text-sm mt-2">
+          ₹{movie.showPrice} •{" "}
+          {movie.genres?.[0]?.name || "Movie"} •{" "}
+          {formatTime(movie.showDateTime)}
         </p>
 
-        <p className="text-sm text-gray-400 mt-2">
-          {new Date(movie.release_date).getFullYear()} •
-          {movie.genres?.slice(0, 2).map(g => g.name).join(' | ')} •
-          {timeFormat(movie.runtime)}
-        </p>
-      </div>
+        {/* Bottom */}
+        <div className="flex items-center justify-between mt-6">
+          
+          <button className="bg-red-500 hover:bg-red-600 transition px-5 py-2 rounded-full text-white font-semibold">
+            Buy Tickets
+          </button>
 
-      <div className="flex items-center justify-between mt-4">
-        <button
-          onClick={handleNavigate}
-          className="px-4 py-2 text-xs bg-primary hover:bg-primary-dull
-                     transition rounded-full font-medium"
-        >
-          Buy Tickets
-        </button>
-
-        <div className="flex items-center gap-1 text-sm text-gray-400">
-          <StarIcon className="w-4 h-4 text-primary fill-primary" />
-          {movie.vote_average?.toFixed(1)}
+          <div className="flex items-center gap-1">
+            <StarIcon
+              size={18}
+              className="text-red-400 fill-red-400"
+            />
+            <span className="text-white font-medium">
+              {movie.vote_average}
+            </span>
+          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MovieCard
-
+export default MovieCard;
