@@ -66,6 +66,7 @@ export const dummyShowsData = [
     vote_average: 6.4,
     showPrice: 59,
     showDateTime: "2025-06-30T02:30:00",
+    vote_count: 15000,
   },
 
   {
@@ -78,8 +79,8 @@ export const dummyShowsData = [
       "https://image.tmdb.org/t/p/w500/6O9nkcmZBymDXtxOGJmulqcxJdv.jpg",
     genres: [{ id: 27, name: "Horror" }],
     vote_average: 6.4,
-    showPrice: 81,
-    showDateTime: "2025-06-30T15:30:00",
+    vote_count: 18000,
+
   },
 
   {
@@ -94,6 +95,7 @@ export const dummyShowsData = [
     vote_average: 7.1,
     showPrice: 81,
     showDateTime: "2025-06-30T03:30:00",
+    vote_count: 27500,
   },
 
   {
@@ -108,6 +110,7 @@ export const dummyShowsData = [
     vote_average: 6.5,
     showPrice: 81,
     showDateTime: "2025-07-15T16:30:00",
+    vote_count: 35960,
   },
 
   {
@@ -122,6 +125,7 @@ export const dummyShowsData = [
     vote_average: 6.5,
     showPrice: 49,
     showDateTime: "2025-06-05T15:30:00",
+    vote_count: 15225,
   },
 
   {
@@ -136,6 +140,7 @@ export const dummyShowsData = [
     vote_average: 7.0,
     showPrice: 79,
     showDateTime: "2025-06-20T16:00:00",
+    vote_count: 19885,
   },
 ];
 
