@@ -1,7 +1,9 @@
 import React from "react";
 import { StarIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const MovieCard = ({ movie }) => {
+  const navigate = useNavigate();
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
@@ -17,6 +19,10 @@ const MovieCard = ({ movie }) => {
   const image =
     movie.poster_path ||
     "https://via.placeholder.com/500x750?text=Movie";
+
+  const handleBuyTickets = () => {
+    navigate(`/movies/${movie.id}`);
+  };
 
   return (
     <div className="bg-[#1B2433] rounded-3xl overflow-hidden p-5 w-full max-w-[320px] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/10">
@@ -34,7 +40,6 @@ const MovieCard = ({ movie }) => {
 
       {/* Movie Info */}
       <div className="mt-5">
-        
         <h2 className="text-white text-2xl font-bold line-clamp-1">
           {movie.title}
         </h2>
@@ -45,10 +50,11 @@ const MovieCard = ({ movie }) => {
           {formatTime(movie.showDateTime)}
         </p>
 
-        {/* Bottom */}
         <div className="flex items-center justify-between mt-6">
-          
-          <button className="bg-red-500 hover:bg-red-600 transition px-5 py-2 rounded-full text-white font-semibold">
+          <button
+            onClick={handleBuyTickets}
+            className="bg-red-500 hover:bg-red-600 transition px-5 py-2 rounded-full text-white font-semibold"
+          >
             Buy Tickets
           </button>
 
