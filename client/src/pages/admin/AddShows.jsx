@@ -5,6 +5,7 @@ import { dummyShowsData } from "../../assets/assets";
 import { Check, Star, DeleteIcon } from "lucide-react";
 import { kConverter } from "../../lib/kConverter";
 import { toast } from "react-hot-toast";
+import BlurCircle from "../../components/BlurCircle";
 
 const AddShows = () => {
   const currency = import.meta.env.VITE_CURRENCY || "$";
@@ -109,6 +110,7 @@ const AddShows = () => {
 
   return (
     <div className="relative min-h-full w-full text-white">
+      <BlurCircle top="-60px" left="-20px" />
       <Title text1="Add" text2="Shows" />
 
       <form
@@ -130,8 +132,9 @@ const AddShows = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
             {nowPlayingMovies.map((movie) => {
               const isSelected = selectedMovie === movie._id;
-
+        
               return (
+                
                 <div
                   key={movie._id}
                   onClick={() => setSelectedMovie(movie._id)}
@@ -288,7 +291,9 @@ const AddShows = () => {
           Add Show
         </button>
       </form>
+        <BlurCircle top="100px" right="-10%" />
     </div>
+    
   );
 };
 

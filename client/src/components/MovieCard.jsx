@@ -53,7 +53,7 @@ const MovieCard = ({ movie }) => {
         <div className="flex items-center justify-between mt-6">
           <button
             onClick={handleBuyTickets}
-            className="bg-red-500 hover:bg-red-600 transition px-5 py-2 rounded-full text-white font-semibold"
+            className="bg-[#FF4D67] hover:bg-red-600 transition px-5 py-2 rounded-full text-white font-semibold"
           >
             Buy Tickets
           </button>

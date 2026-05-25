@@ -55,8 +55,6 @@ const Navbar = () => {
     {[
       ['/', 'Home'],
       ['/movies', 'Movies'],
-      ['/', 'Theaters'],
-      ['/', 'Releases'],
       ['/favourite', 'Favorites'],
     ].map(([to, label]) => (
       <Link
