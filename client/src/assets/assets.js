@@ -82,6 +82,8 @@ export const dummyShowsData = [
     vote_average: 6.4,
     release_date: "2025-04-25",
     vote_count: 18000,
+    showPrice: 59,
+    showDateTime: "2025-07-15T16:30:00",
   },
 
   {

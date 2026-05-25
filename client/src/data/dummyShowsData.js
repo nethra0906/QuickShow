@@ -35,7 +35,10 @@ export const dummyShowsData = [
     genres: [{ name: "Action" }, { name: "Sci-Fi" }],
     runtime: 162,
     vote_average: 7.6,
-    casts: dummyCastsData
+    casts: dummyCastsData,
+    showPrice: 49,
+    showDateTime: "2025-07-10T19:00:00"
+
   },
   {
     id: 157336,
@@ -46,7 +49,9 @@ export const dummyShowsData = [
     genres: [{ name: "Adventure" }, { name: "Drama" }],
     runtime: 169,
     vote_average: 8.6,
-    casts: dummyCastsData
+    casts: dummyCastsData,
+    showPrice: 59,
+    showDateTime: "2025-07-12T21:30:00"
   },
   {
     id: 27205,
@@ -57,7 +62,9 @@ export const dummyShowsData = [
     genres: [{ name: "Action" }, { name: "Thriller" }],
     runtime: 148,
     vote_average: 8.4,
-    casts: dummyCastsData
+    casts: dummyCastsData,
+    showPrice: 55,
+    showDateTime: "2025-07-14T18:00:00"
   },
   {
     id: 155,
@@ -68,7 +75,9 @@ export const dummyShowsData = [
     genres: [{ name: "Crime" }, { name: "Drama" }],
     runtime: 152,
     vote_average: 9.0,
-    casts: dummyCastsData
+    casts: dummyCastsData,
+    showPrice: 60,
+    showDateTime: "2025-07-16T20:00:00"
   },
 ]
 
