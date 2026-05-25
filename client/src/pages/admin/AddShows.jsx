@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Title from "../../components/admin/Title";
 import Loading from "../../components/Loading";
 import { dummyShowsData } from "../../assets/assets";
-import { Check, Star, Trash2 } from "lucide-react";
+import { Check, Star, DeleteIcon } from "lucide-react";
 import { kConverter } from "../../lib/kConverter";
 import { toast } from "react-hot-toast";
 
@@ -13,7 +13,7 @@ const AddShows = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [dateTimeInput, setDateTimeInput] = useState("");
   const [showPrice, setShowPrice] = useState("");
-  const [showTimings, setShowTimings] = useState([]);
+  const [dateTimeSelection, setDateTimeSelection] = useState({});
 
   const getNowPlayingMovies = async () => {
     setNowPlayingMovies(dummyShowsData || []);
@@ -29,23 +29,40 @@ const AddShows = () => {
       return;
     }
 
-    if (showTimings.includes(dateTimeInput)) {
-      toast.error("This timing already exists");
-      return;
-    }
+    const [date, time] = dateTimeInput.split("T");
 
     setDateTimeSelection((prev) => {
-      const times = prev[date] || [];
-      if(!times.includes(time))
-      {
-        return {...prev, [date]: [...times, time]};
+      const existingTimes = prev[date] || [];
+
+      if (existingTimes.includes(time)) {
+        toast.error("This timing already exists");
+        return prev;
       }
-      return prev;
+
+      return {
+        ...prev,
+        [date]: [...existingTimes, time],
+      };
     });
+
+    setDateTimeInput("");
   };
 
-  const removeTiming = (timing) => {
-    setShowTimings((prev) => prev.filter((t) => t !== timing));
+  const removeTiming = (date, time) => {
+    setDateTimeSelection((prev) => {
+      const updatedTimes = prev[date].filter((t) => t !== time);
+
+      if (updatedTimes.length === 0) {
+        const copy = { ...prev };
+        delete copy[date];
+        return copy;
+      }
+
+      return {
+        ...prev,
+        [date]: updatedTimes,
+      };
+    });
   };
 
   const handleAddShowSubmit = (e) => {
@@ -61,15 +78,24 @@ const AddShows = () => {
       return;
     }
 
-    if (showTimings.length === 0) {
+    const timings = Object.entries(dateTimeSelection).flatMap(
+      ([date, times]) =>
+        times.map((time) => ({
+          date,
+          time,
+          dateTime: `${date}T${time}`,
+        }))
+    );
+
+    if (timings.length === 0) {
       toast.error("Please add at least one show timing");
       return;
     }
 
     const payload = {
       movieId: selectedMovie,
-      showPrice,
-      timings: showTimings,
+      showPrice: Number(showPrice),
+      timings,
     };
 
     console.log(payload);
@@ -89,6 +115,7 @@ const AddShows = () => {
         onSubmit={handleAddShowSubmit}
         className="mt-10 flex flex-col gap-8"
       >
+        {/* Movie Selection */}
         <div>
           <div className="mb-4">
             <h3 className="text-lg font-medium tracking-wide">
@@ -114,7 +141,6 @@ const AddShows = () => {
                       : "border-white/10 hover:border-white/25 hover:-translate-y-1"
                   }`}
                 >
-
                   <div className="absolute inset-0 bg-gradient-to-br from-[#FF4D67]/20 via-[#1A1015] to-black flex items-center justify-center p-4">
                     <p className="text-xs font-black tracking-widest uppercase text-white/30 text-center line-clamp-3">
                       {movie.title}
@@ -174,6 +200,7 @@ const AddShows = () => {
           </div>
         </div>
 
+        {/* Show Price */}
         <div>
           <label className="block text-sm font-medium text-white/70 mb-2">
             Show Price
@@ -193,6 +220,7 @@ const AddShows = () => {
           </div>
         </div>
 
+        {/* Date Time Selection */}
         <div>
           <label className="block text-sm font-medium text-white/70 mb-2">
             Select Date & Time
@@ -216,9 +244,49 @@ const AddShows = () => {
           </div>
         </div>
 
-        
+        {/* Selected Timings */}
+        {Object.keys(dateTimeSelection).length > 0 && (
+          <div className="mt-6">
+            <h2 className="mb-3 text-lg font-medium">
+              Selected Date & Time
+            </h2>
 
-       
+            <ul className="space-y-4">
+              {Object.entries(dateTimeSelection).map(([date, times]) => (
+                <li key={date}>
+                  <div className="font-medium text-white">
+                    {new Date(date).toLocaleDateString()}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {times.map((time) => (
+                      <div
+                        key={time}
+                        className="border border-primary px-3 py-1 rounded-lg flex items-center gap-2"
+                      >
+                        <span>{time}</span>
+
+                        <DeleteIcon
+                          width={15}
+                          className="cursor-pointer text-red-500 hover:text-red-700"
+                          onClick={() => removeTiming(date, time)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+  
+        <button
+          type="submit"
+          className="w-fit bg-primary px-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
+        >
+          Add Show
+        </button>
       </form>
     </div>
   );
