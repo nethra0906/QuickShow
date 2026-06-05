@@ -6,7 +6,8 @@ import connectDB from "./configs/db.js";
 const app = express();
 const PORT = 3000;
 
-await connectDB()
+console.log("URI:", process.env.MONGODB_URI); 
+await connectDB();
 
 app.use(cors());
 app.use(express.json());
