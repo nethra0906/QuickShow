@@ -1,19 +1,27 @@
 import { Inngest } from "inngest";
 import User from "../models/User.js";
 
-
 export const inngest = new Inngest({
   id: "movie-ticket-booking",
 });
 
-// 
+// Sync Clerk user creation
 const syncUserCreation = inngest.createFunction(
-  { id: "sync-user-from-clerk" },
-  { event: "clerk/user.created" },
+  {
+    id: "sync-user-from-clerk",
+    triggers: {
+      event: "clerk/user.created",
+    },
+  },
   async ({ event }) => {
     try {
-      const { id, first_name, last_name, email_addresses, image_url } =
-        event.data;
+      const {
+        id,
+        first_name,
+        last_name,
+        email_addresses,
+        image_url,
+      } = event.data;
 
       await User.create({
         _id: id,
@@ -22,42 +30,53 @@ const syncUserCreation = inngest.createFunction(
         image: image_url,
       });
 
-      console.log("User created:", id);
+      console.log("✅ User created:", id);
     } catch (err) {
-      console.error("Error creating user:", err);
+      console.error("❌ Error creating user:", err);
       throw err;
     }
   }
 );
 
-
+// Sync Clerk user deletion
 const syncUserDeletion = inngest.createFunction(
-  { id: "delete-user-with-clerk" },
-  { event: "clerk/user.deleted" },
+  {
+    id: "delete-user-with-clerk",
+    triggers: {
+      event: "clerk/user.deleted",
+    },
+  },
   async ({ event }) => {
     try {
       const { id } = event.data;
 
-      console.log("Deleting user:", id);
-
       await User.findByIdAndDelete(id);
 
-      console.log("User deleted:", id);
+      console.log("✅ User deleted:", id);
     } catch (err) {
-      console.error("Error deleting user:", err);
+      console.error("❌ Error deleting user:", err);
       throw err;
     }
   }
 );
 
-
+// Sync Clerk user update
 const syncUserUpdation = inngest.createFunction(
-  { id: "update-user-from-clerk" },
-  { event: "clerk/user.updated" },
+  {
+    id: "update-user-from-clerk",
+    triggers: {
+      event: "clerk/user.updated",
+    },
+  },
   async ({ event }) => {
     try {
-      const { id, first_name, last_name, email_addresses, image_url } =
-        event.data;
+      const {
+        id,
+        first_name,
+        last_name,
+        email_addresses,
+        image_url,
+      } = event.data;
 
       await User.findByIdAndUpdate(
         id,
@@ -69,9 +88,9 @@ const syncUserUpdation = inngest.createFunction(
         { new: true }
       );
 
-      console.log("User updated:", id);
+      console.log("✅ User updated:", id);
     } catch (err) {
-      console.error("Error updating user:", err);
+      console.error("❌ Error updating user:", err);
       throw err;
     }
   }
