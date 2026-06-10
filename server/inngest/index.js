@@ -5,7 +5,6 @@ export const inngest = new Inngest({
   id: "movie-ticket-booking",
 });
 
-// Sync Clerk user creation
 const syncUserCreation = inngest.createFunction(
   {
     id: "sync-user-from-clerk",
@@ -30,15 +29,15 @@ const syncUserCreation = inngest.createFunction(
         image: image_url,
       });
 
-      console.log("✅ User created:", id);
+      console.log("User created:", id);
     } catch (err) {
-      console.error("❌ Error creating user:", err);
+      console.error("rror creating user:", err);
       throw err;
     }
   }
 );
 
-// Sync Clerk user deletion
+
 const syncUserDeletion = inngest.createFunction(
   {
     id: "delete-user-with-clerk",
@@ -52,15 +51,14 @@ const syncUserDeletion = inngest.createFunction(
 
       await User.findByIdAndDelete(id);
 
-      console.log("✅ User deleted:", id);
+      console.log("User deleted:", id);
     } catch (err) {
-      console.error("❌ Error deleting user:", err);
+      console.error("Error deleting user:", err);
       throw err;
     }
   }
 );
 
-// Sync Clerk user update
 const syncUserUpdation = inngest.createFunction(
   {
     id: "update-user-from-clerk",
@@ -88,9 +86,9 @@ const syncUserUpdation = inngest.createFunction(
         { new: true }
       );
 
-      console.log("✅ User updated:", id);
+      console.log("User updated:", id);
     } catch (err) {
-      console.error("❌ Error updating user:", err);
+      console.error("Error updating user:", err);
       throw err;
     }
   }
