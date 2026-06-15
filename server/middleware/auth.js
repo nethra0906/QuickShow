@@ -1,0 +1,20 @@
+import {clerkClient} from "@clerk/express";
+
+export const protectAdmin = async (req, res, next) => {
+    try {
+        const {userId} = req.auth();
+        const user = await clerkClient.users.getUser(userId);
+
+        if(user.privateMetadata.role !== 'admin')
+        {
+            return res.json({success: false, message: 'Unauthorized access. Admins only.'});
+        }
+
+        next();
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.json({success: false, message: 'Error verifying admin role.'});
+    }
+}
