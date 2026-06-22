@@ -1,4 +1,4 @@
-import Show from "../models/Show";
+import Show from "../models/Show.js";
 
 
 export const isAdmin = async(req, res) => {
