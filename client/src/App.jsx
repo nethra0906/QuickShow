@@ -14,14 +14,22 @@ import Dashboard from './pages/admin/Dashboard'
 import AddShows from './pages/admin/AddShows'
 import ListShows from './pages/admin/ListShows'
 import ListBookinngs from './pages/admin/ListBookinngs'
+import { useAppContext } from './context/AppContext'
+import { SignIn } from '@clerk/clerk-react'
 
 const App = () => {
   const location = useLocation()
   const isAdminRoute = location.pathname.startsWith('/admin')
+  const { user } = useAppContext()
 
   return (
     <>
-      <Toaster />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 1500,
+        }}
+      />
 
       {!isAdminRoute && <Navbar />}
 
@@ -33,7 +41,18 @@ const App = () => {
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/favourite" element={<Favourite />} />
 
-        <Route path="/admin/*" element={<Layout />}>
+        <Route
+          path="/admin/*"
+          element={
+            user ? (
+              <Layout />
+            ) : (
+              <div className="min-h-screen flex justify-center items-center">
+                <SignIn fallbackRedirectUrl="/admin" />
+              </div>
+            )
+          }
+        >
           <Route index element={<Dashboard />} />
           <Route path="add-shows" element={<AddShows />} />
           <Route path="list-shows" element={<ListShows />} />
