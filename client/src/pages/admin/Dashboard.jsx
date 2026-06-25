@@ -3,9 +3,13 @@ import Title from '../../components/admin/Title'
 import Loading from '../../components/Loading'
 import BlurCircle from '../../components/BlurCircle'
 import { DollarSign, Ticket, Film, Users, Star } from 'lucide-react'
-import * as AssetsModule from '../../assets/assets'
+import { useAppContext } from '../../context/AppContext'
+import { toast } from "react-hot-toast";
 
 const Dashboard = () => {
+
+  const { axios, getToken, user, image_base_url } = useAppContext();
+  
   const currency = import.meta.env.VITE_CURRENCY || '$'
   const [loading, setLoading] = useState(true)
   const [dashboardData, setDashboardData] = useState({
@@ -15,21 +19,41 @@ const Dashboard = () => {
     activeShows: [], 
   })
 
-  useEffect(() => {
-    try {
-      const localData = AssetsModule.dummyDashboardData || {}
-      setDashboardData({
-        totalRevenue: localData.totalRevenue ?? 0,
-        totalBookings: localData.totalBookings ?? 0,
-        totalUsers: localData.totalUser ?? 0,
-        activeShows: Array.isArray(localData.activeShows) ? localData.activeShows : [],
-      })
+  const fetchDashboardData = async() => {
+      try {
+
+      const { data } = await axios.get("/api/admin/dashboard", {headers: {
+        Authorization: `Bearer ${await getToken()}`}})
+        if(data.success)
+        {
+          setDashboardData(data.dashboardData)
+          setLoading(false)
+        }
+
+        else{
+          toast.error(data.message)
+        }
+      
     } catch (error) {
-      console.error("Dashboard metrics allocation error:", error)
-    } finally {
-      setLoading(false)
+
+      toast.error(error.response?.data?.message || error.message)
+     
+    } 
+
+    finally {
+    setLoading(false)
+}
+    
+  }
+
+  useEffect(() => {
+
+    if(user)
+    {
+       fetchDashboardData();
     }
-  }, [])
+   
+  }, [user])
 
   const dashboardCards = [
     { title: 'Total Revenue', value: `${currency}${dashboardData.totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
@@ -64,6 +88,7 @@ const Dashboard = () => {
               </div>
             </div>
           )
+          
         })}
       </div>
 
@@ -81,7 +106,7 @@ const Dashboard = () => {
               
               <div className="relative aspect-[2/3] w-full bg-neutral-950 border-b border-white/5 overflow-hidden">
                 <img 
-                  src={movieObj.poster_path} 
+                  src={image_base_url + movieObj.poster_path} 
                   alt={movieObj.title || 'Poster'} 
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />

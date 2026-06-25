@@ -1,40 +1,63 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { dummyShowsData } from '../data/dummyShowsData'
 import BlurCircle from '../components/BlurCircle'
 import timeFormat from '../lib/timeFormat'
 import { StarIcon, Heart, PlayCircle, Calendar } from 'lucide-react'
 import DataSelect from '../components/DataSelect'
-import { dummyDateTimeData } from '../data/dateTimeData2'
 import MovieCard from '../components/MovieCard'
 import Loading from '../components/Loading'
+import { useAppContext } from '../context/AppContext'
+import { toast } from "react-hot-toast";
 
 const MovieDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
+const [movie, setMovie] = useState(null);
+const [dateTime, setDateTime] = useState({});
 
-  const [movie, setMovie] = useState(null)
-  const [isFavourite, setIsFavourite] = useState(false)
+  const {shows, axios, getToken, user, fetchFavoriteMovies, favoriteMovies, image_base_url} = useAppContext()
 
-  useEffect(() => {
-    const foundMovie = dummyShowsData.find(
-      item =>
-        String(item.id) === String(id) ||
-        String(item._id) === String(id)
-    )
+const getMovie = async () => {
+  try {
+    const { data } = await axios.get(`/api/show/${id}`);
 
-    if (foundMovie) {
-      setMovie(foundMovie)
-      // Smooth scroll to top when a new movie details page loads
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    console.log(data);
+
+    if (data.success) {
+      setMovie(data.movie);
+      setDateTime(data.dateTime);
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+  
+  useEffect(() => {
+    getMovie()
   }, [id])
 
-  if (!movie) {
-    return <Loading />
+  const handleFavorite = async () =>
+  {
+    try {
+      if(!user)
+        return toast.error("Please login to proceed")
+
+      const { data } = await axios.post('/api/user/update-favorites', {movieId: id}, {headers: {
+        Authorization: `Bearer ${await getToken()}`}})
+
+        if(data.success)
+          await fetchFavoriteMovies()
+        toast.success(data.message)
+
+      
+    } catch (error) {
+
+      console.log(error)
+      
+    }
   }
 
-  return (
+  return movie ? (
     <section className="relative px-6 md:px-16 lg:px-24 xl:px-32 pt-32 pb-24 bg-black text-white overflow-hidden min-h-screen">
  
       <BlurCircle top="5%" left="-100px" color="bg-[#FF4D67]/10" />
@@ -44,7 +67,7 @@ const MovieDetails = () => {
         
         <div className="w-64 md:w-72 shrink-0 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/80 group relative">
           <img
-            src={movie.poster_path}
+            src={image_base_url+movie.poster_path}
             alt={movie.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -60,7 +83,7 @@ const MovieDetails = () => {
                 {movie.original_language?.toUpperCase() || 'EN'}
               </span>
               <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                {movie.release_date.split('-')[0]}
+                {movie.release_date?.split('-')[0]}
               </span>
             </div>
 
@@ -71,7 +94,7 @@ const MovieDetails = () => {
             <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg w-fit border border-white/5">
               <StarIcon className="w-4 h-4 text-[#FF4D67] fill-[#FF4D67]" />
               <span className="text-sm font-bold text-white">
-                {movie.vote_average.toFixed(1)}
+                {movie.vote_average?.toFixed(1)}
               </span>
               <span className="text-xs text-gray-400 font-medium">User Rating</span>
             </div>
@@ -81,8 +104,8 @@ const MovieDetails = () => {
             </p>
 
             <p className="text-gray-400 text-xs md:text-sm font-semibold pt-2">
-              {timeFormat(movie.runtime)} &nbsp;•&nbsp;{' '}
-              <span className="text-gray-300">{movie.genres.map(g => g.name).join(', ')}</span>
+              {movie.runtime && timeFormat(movie.runtime)} &nbsp;•&nbsp;{' '}
+              <span className="text-gray-300">{movie.genres?.map(g => g.name).join(', ')}</span>
             </p>
           </div>
 
@@ -101,13 +124,11 @@ const MovieDetails = () => {
             </a>
 
             <button 
-              onClick={() => setIsFavourite(!isFavourite)}
+              onClick={handleFavorite}
               className="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-3 rounded-full hover:bg-white/10 hover:border-[#FF4D67]/30 transition-all duration-300 active:scale-95 group"
             >
-              <Heart className={`w-4 h-4 transition-colors ${isFavourite ? 'text-[#FF4D67] fill-[#FF4D67]' : 'text-gray-400 group-hover:text-[#FF4D67]'}`} />
-              <span className="text-xs font-bold">
-                {isFavourite ? 'Added to Favourites' : 'Add to Favourites'}
-              </span>
+              <Heart className={`w-4 h-4 transition-colors ${favoriteMovies.find(movie => movie._id ===id) ?'fill-primary text-primary': "" }`} />
+
             </button>
           </div>
 
@@ -130,7 +151,7 @@ const MovieDetails = () => {
                 >
                   <div className="rounded-full h-20 w-20 overflow-hidden border-2 border-white/5 group-hover:border-[#FF4D67] shadow-lg transition-all duration-300">
                     <img
-                      src={cast.profile_path}
+                      src={image_base_url + cast.profile_path}
                       alt={cast.name}
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -146,9 +167,9 @@ const MovieDetails = () => {
 
         <div id="dateSelect" className="mt-16 scroll-mt-28">
           <DataSelect
-            dateTime={dummyDateTimeData}
-            movieId={movie.id}
-          />
+    dateTime={dateTime}
+    movieId={movie._id}
+/>
         </div>
 
         <div className="mt-24">
@@ -159,7 +180,7 @@ const MovieDetails = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8 justify-items-center">
-            {dummyShowsData.slice(0, 4).map((recMovie, index) => (
+            {shows.slice(0, 4).map((recMovie, index) => (
               <div key={index} className="w-full transform transition-all duration-300 hover:-translate-y-2">
                 <MovieCard movie={recMovie} />
               </div>
@@ -182,6 +203,8 @@ const MovieDetails = () => {
       </div>
     </section>
   )
+: (<Loading/>)
+
 }
 
 export default MovieDetails

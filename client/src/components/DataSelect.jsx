@@ -1,33 +1,45 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import BlurCircle from './BlurCircle'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import toast from 'react-hot-toast'
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BlurCircle from "./BlurCircle";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import toast from "react-hot-toast";
 
-const DataSelect = ({ dateTime, movieId }) => {
-  const navigate = useNavigate()
+const DataSelect = ({ dateTime = {}, movieId }) => {
+  const navigate = useNavigate();
 
-  const [selectedDate, setSelectedDate] = useState(dateTime[0]?.date)
+  // Convert backend object into array
+  const dates = useMemo(() => {
+    return Object.keys(dateTime).map((date) => ({
+      date,
+      shows: dateTime[date],
+    }));
+  }, [dateTime]);
 
-  const [selectedTime, setSelectedTime] = useState(
-    dateTime[0]?.shows[0]?.time
-  )
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedShow, setSelectedShow] = useState(null);
+
+  useEffect(() => {
+    if (dates.length > 0) {
+      setSelectedDate(dates[0].date);
+      setSelectedShow(dates[0].shows[0] || null);
+    }
+  }, [dates]);
 
   const currentShows =
-    dateTime.find(day => day.date === selectedDate)?.shows || []
+    dates.find((d) => d.date === selectedDate)?.shows || [];
 
   const onBookHandler = () => {
-    if (!selectedDate || !selectedTime) {
-      toast.error('Please select date and time')
-      return
+    if (!selectedShow) {
+      toast.error("Please select date and time");
+      return;
     }
 
     navigate(
-      `/movies/${movieId}/date?date=${selectedDate}&time=${selectedTime}`
-    )
+      `/movies/${movieId}/date?showId=${selectedShow.showId}`
+    );
 
-    window.scrollTo(0, 0)
-  }
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div id="dateSelect" className="pt-24">
@@ -36,45 +48,43 @@ const DataSelect = ({ dateTime, movieId }) => {
         <BlurCircle top="-100px" left="-100px" />
         <BlurCircle top="100px" right="-50px" />
 
-  
+        {/* Date */}
+
         <div>
-          <p className="text-lg font-semibold">
-            Choose Date
-          </p>
+          <p className="text-lg font-semibold">Choose Date</p>
 
           <div className="flex items-center gap-6 text-sm mt-5">
 
             <ChevronLeft className="cursor-pointer opacity-70 hover:opacity-100" />
 
             <div className="grid grid-cols-3 md:flex md:flex-wrap gap-4">
-              {dateTime.map(day => {
-                const dateObj = new Date(day.date)
+              {dates.map((day) => {
+                const dateObj = new Date(day.date);
 
                 return (
                   <button
                     key={day.date}
                     onClick={() => {
-                      setSelectedDate(day.date)
-                      setSelectedTime(day.shows[0]?.time)
+                      setSelectedDate(day.date);
+                      setSelectedShow(day.shows[0] || null);
                     }}
-                    className={`flex flex-col items-center justify-center h-16 w-16 rounded-lg transition
-                      ${
-                        selectedDate === day.date
-                          ? 'bg-primary text-white'
-                          : 'bg-primary/20 hover:bg-primary/30'
-                      }`}
+                    className={`flex flex-col items-center justify-center h-16 w-16 rounded-lg transition ${
+                      selectedDate === day.date
+                        ? "bg-primary text-white"
+                        : "bg-primary/20 hover:bg-primary/30"
+                    }`}
                   >
                     <span className="font-semibold text-base">
                       {dateObj.getDate()}
                     </span>
 
                     <span className="text-xs uppercase">
-                      {dateObj.toLocaleDateString('en-US', {
-                        month: 'short',
+                      {dateObj.toLocaleDateString("en-US", {
+                        month: "short",
                       })}
                     </span>
                   </button>
-                )
+                );
               })}
             </div>
 
@@ -82,24 +92,26 @@ const DataSelect = ({ dateTime, movieId }) => {
           </div>
         </div>
 
+        {/* Time */}
+
         <div>
-          <p className="text-lg font-semibold">
-            Choose Time
-          </p>
+          <p className="text-lg font-semibold">Choose Time</p>
 
           <div className="flex flex-wrap gap-4 mt-5">
-            {currentShows.map(show => (
+            {currentShows.map((show) => (
               <button
-                key={show.id}
-                onClick={() => setSelectedTime(show.time)}
-                className={`px-5 py-2 rounded-lg text-sm transition
-                  ${
-                    selectedTime === show.time
-                      ? 'bg-primary text-white'
-                      : 'bg-primary/20 hover:bg-primary/30'
-                  }`}
+                key={show.showId}
+                onClick={() => setSelectedShow(show)}
+                className={`px-5 py-2 rounded-lg text-sm transition ${
+                  selectedShow?.showId === show.showId
+                    ? "bg-primary text-white"
+                    : "bg-primary/20 hover:bg-primary/30"
+                }`}
               >
-                {show.time}
+                {new Date(show.time).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </button>
             ))}
           </div>
@@ -114,7 +126,7 @@ const DataSelect = ({ dateTime, movieId }) => {
 
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DataSelect
+export default DataSelect;

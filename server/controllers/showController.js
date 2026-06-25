@@ -20,7 +20,7 @@ export const getNowPlayingMovies = async (req, res) => {
 
 export const addShow = async (req, res) => {
     try {
-        const { movieId, showsInput, showPrice } = req.body;  
+        const { movieId, timings, showPrice } = req.body;  
         let movie = await Movie.findById(movieId);
 
         if (!movie) {
@@ -58,14 +58,12 @@ export const addShow = async (req, res) => {
             movie = await Movie.create(movieDetails);
         }
 
-        const showsToCreate = [];
-        showsInput.forEach(show => {
-            const showDate = show.date;
-            show.time.forEach((time) => {
-                const dateTimeString = `${showDate}T${time}`;
-                showsToCreate.push({ movie: movieId, showDateTime: new Date(dateTimeString), showPrice, occupiedSeats: {}});
-            });
-        });
+       const showsToCreate = timings.map((timing) => ({
+    movie: movieId,
+    showDateTime: new Date(timing.dateTime),
+    showPrice,
+    occupiedSeats: {},
+}));
 
         if(showsToCreate.length > 0) {
             await Show.insertMany(showsToCreate);

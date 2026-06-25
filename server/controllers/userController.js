@@ -28,11 +28,9 @@ export const updateFavorites = async(req, res) => {
 
         const user = await clerkClient.users.getUser(userId);
 
-        if(!user.privateMetadata.favorites)
-        {
-            user.primaryMeta.favorites = []
-        }
-        
+        if (!user.privateMetadata.favorites) {
+            user.privateMetadata.favorites = [];
+}
         if(!user.privateMetadata.favorites.includes(movieId))
         {
             user.privateMetadata.favorites.push(movieId)

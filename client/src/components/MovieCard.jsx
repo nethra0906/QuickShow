@@ -1,9 +1,11 @@
 import React from "react";
 import { StarIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 
 const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
+  const { image_base_url } = useAppContext()
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
@@ -21,7 +23,7 @@ const MovieCard = ({ movie }) => {
     "https://via.placeholder.com/500x750?text=Movie";
 
   const handleBuyTickets = () => {
-    navigate(`/movies/${movie.id}`);
+    navigate(`/movies/${movie._id}`);
   };
 
   return (
@@ -29,7 +31,7 @@ const MovieCard = ({ movie }) => {
       
       {/* Movie Poster */}
       <img
-        src={image}
+        src={image_base_url + image}
         alt={movie.title}
         className="w-full h-[380px] object-cover rounded-2xl"
         onError={(e) => {
