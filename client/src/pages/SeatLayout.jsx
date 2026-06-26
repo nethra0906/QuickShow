@@ -1,76 +1,171 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
-import { dummyShowsData } from '../data/dummyShowsData'
-import { dummyDateTimeData } from '../data/dateTimeData2'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import Loading from '../components/Loading'
-import { ClockIcon, ChevronRight } from 'lucide-react'
 import BlurCircle from '../components/BlurCircle'
-import { assets } from '../assets/assets'
+import { ClockIcon, ChevronRight } from 'lucide-react'
 import isoTimeFormat from '../lib/isoTimeFormat'
-import { useNavigate } from 'react-router-dom'
-
+import { useAppContext } from '../context/AppContext'
 
 const SeatLayout = () => {
-  const { id } = useParams()
+
+  const { id: movieId } = useParams()                      // movieId from /movies/:id/date
   const [searchParams] = useSearchParams()
+  const date = searchParams.get('date')      
+  const showIdFromUrl = searchParams.get('showId')              // date from ?date=2025-01-15
 
-  const dateParam = searchParams.get('date')
-  const timeParam = searchParams.get('time')
-
-  const [selectedTime, setSelectedTime] = useState(null)
-  const [show, setShow] = useState(null)
   const [selectedSeats, setSelectedSeats] = useState([])
-
-  const themeColor = '#FF4D67' 
+  const [selectedTime, setSelectedTime] = useState(null)   // { time, showId }
+  const [movie, setMovie] = useState(null)
+  const [dateTime, setDateTime] = useState({})             // { "2025-01-15": [{time, showId}] }
+  const [occupiedSeats, setOccupiedSeats] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [bookingLoading, setBookingLoading] = useState(false)
 
   const navigate = useNavigate()
+  const { axios, user, getToken  } = useAppContext()
 
-  useEffect(() => {
-    const movie = dummyShowsData.find((item) => String(item.id) === String(id))
-    if (movie) {
-      setShow({ movie })
-    }
-  }, [id])
+  // Fetch movie + show timings
+  const getShow = async () => {
+  try {
+    setLoading(true)
+    const { data } = await axios.get(`/api/show/${movieId}`)
+    if (data.success) {
+      setMovie(data.movie)
+      setDateTime(data.dateTime)
 
-  const selectedDateData = dummyDateTimeData.find(item => item.date === dateParam)?.shows || []
-
-  useEffect(() => {
-    if (timeParam && selectedDateData.length > 0) {
-      const matched = selectedDateData.find(item => item.time === timeParam)
-      if (matched) {
-        setSelectedTime(matched)
+      // Auto-select the time the user picked on the previous page
+      if (showIdFromUrl && data.dateTime[date]) {
+        const preSelected = data.dateTime[date].find(
+          item => item.showId === showIdFromUrl
+        )
+        if (preSelected) {
+          setSelectedTime(preSelected)
+          getOccupiedSeats(preSelected.showId)
+        }
       }
     }
-  }, [timeParam, selectedDateData])
+  } catch (error) {
+    console.error(error)
+    toast.error('Failed to load show details')
+  } finally {
+    setLoading(false)
+  }
+}
 
-  const toggleSeat = (seatId) => {
-    setSelectedSeats(prev => 
-      prev.includes(seatId) ? prev.filter(s => s !== seatId) : [...prev, seatId]
+  // Fetch occupied seats whenever selected time changes
+  const getOccupiedSeats = async (showId) => {
+    try {
+      const { data } = await axios.get(`/api/booking/seats/${showId}`)
+      if (data.success) {
+        setOccupiedSeats(data.occupiedSeats)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleTimeSelect = (item) => {
+    setSelectedTime(item)
+    setSelectedSeats([])                                   // reset seats on time change
+    getOccupiedSeats(item.showId)
+  }
+
+  const handleSeatClick = (seatId) => {
+    if (!selectedTime) {
+      return toast('Please select a time first')
+    }
+    if (occupiedSeats.includes(seatId)) return            // already booked, ignore
+
+    if (!selectedSeats.includes(seatId) && selectedSeats.length >= 5) {
+      return toast('You can only select up to 5 seats')
+    }
+
+    setSelectedSeats(prev =>
+      prev.includes(seatId)
+        ? prev.filter(s => s !== seatId)
+        : [...prev, seatId]
     )
   }
 
-  if (!show) return <Loading />
-
-  const renderSeatBlock = (rowLabel, startNum, endNum) => {
-    const seats = []
-    for (let i = startNum; i <= endNum; i++) {
-      const seatId = `${rowLabel}${i}`
-      const isSelected = selectedSeats.includes(seatId)
-      seats.push(
-        <button
-          key={seatId}
-          onClick={() => toggleSeat(seatId)}
-          className={`w-8 h-8 md:w-9 md:h-9 rounded-md border-[1.5px] text-[10px] font-bold transition-all duration-200 flex items-center justify-center
-            ${isSelected 
-              ? 'bg-[#FF4D67] border-[#FF4D67] text-white shadow-lg shadow-[#FF4D67]/40 scale-105' 
-              : 'bg-transparent border-[#FF4D67]/40 text-gray-400 hover:border-[#FF4D67] hover:text-white'}`}
-        >
-          {seatId}
-        </button>
-      )
+  const handleCheckout = async () => {
+    if (!user) {
+      return toast('Please login to book seats')
     }
-    return <div className='flex gap-1.5 md:gap-2'>{seats}</div>
+    if (!selectedTime) {
+      return toast('Please select a time first')
+    }
+    if (selectedSeats.length === 0) {
+      return toast('Please select at least one seat')
+    }
+
+    try {
+      setBookingLoading(true)
+      const { data } = await axios.post('/api/booking/create', 
+        {
+          showId: selectedTime.showId,
+          selectedSeats,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${await getToken()}`  // ✅ add this
+          }
+        }
+      )
+
+      if (data.success) {
+        toast.success('Booking confirmed!')
+        navigate('/my-bookings')
+      } else {
+        toast.error(data.error || 'Booking failed')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Booking failed. Please try again.')
+    } finally {
+      setBookingLoading(false)
+    }
   }
+
+  const renderSeats = (row, count = 9) => {
+    return (
+      <div key={row} className="flex gap-2 mt-2">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {Array.from({ length: count }, (_, i) => {
+            const seatId = `${row}${i + 1}`
+            const isOccupied = occupiedSeats.includes(seatId)
+            const isSelected = selectedSeats.includes(seatId)
+
+            return (
+              <button
+                key={seatId}
+                onClick={() => handleSeatClick(seatId)}
+                disabled={isOccupied}
+                className={`h-8 w-8 rounded border text-[10px] font-semibold transition-all
+                  ${isOccupied
+                    ? 'bg-gray-700 border-gray-600 text-gray-500 cursor-not-allowed'
+                    : isSelected
+                      ? 'bg-[#FF4D67] border-[#FF4D67] text-white cursor-pointer'
+                      : 'border-[#FF4D67]/60 text-gray-300 hover:border-[#FF4D67] cursor-pointer'
+                  }`}
+              >
+                {seatId}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  useEffect(() => {
+    if (movieId) getShow()
+  }, [movieId])
+
+  // Timings for the selected date
+  const timingsForDate = date && dateTime[date] ? dateTime[date] : []
+
+  if (loading) return <Loading />
 
   return (
     <div className='relative min-h-screen px-6 md:px-16 lg:px-24 pt-32 pb-32 overflow-hidden text-white bg-black'>
@@ -78,20 +173,20 @@ const SeatLayout = () => {
       <BlurCircle bottom='0px' left='-100px' />
 
       <div className='flex flex-col lg:flex-row gap-10'>
-        
-        
+
+        {/* Timings sidebar */}
         <div className='lg:w-72 w-full'>
           <div className='bg-[#1A1015] border border-[#FF4D67]/20 rounded-2xl p-6 sticky top-28'>
             <h2 className='text-2xl font-bold mb-6'>Available Timings</h2>
             <div className='space-y-3'>
-              {selectedDateData.length > 0 ? (
-                selectedDateData.map((item) => (
+              {timingsForDate.length > 0 ? (
+                timingsForDate.map((item, index) => (
                   <button
-                    key={item.id}
-                    onClick={() => setSelectedTime(item)}
+                    key={item.showId || index}
+                    onClick={() => handleTimeSelect(item)}
                     className={`w-full flex items-center gap-3 px-5 py-4 rounded-xl transition-all duration-300 border
-                      ${selectedTime?.id === item.id 
-                        ? 'bg-[#FF4D67] border-[#FF4D67] text-white shadow-lg shadow-[#FF4D67]/20' 
+                      ${selectedTime?.showId === item.showId
+                        ? 'bg-[#FF4D67] border-[#FF4D67] text-white shadow-lg shadow-[#FF4D67]/20'
                         : 'bg-white/5 border-transparent text-gray-400 hover:bg-white/10'}`}
                   >
                     <ClockIcon className='w-4 h-4' />
@@ -99,16 +194,45 @@ const SeatLayout = () => {
                   </button>
                 ))
               ) : (
-                <p className='text-gray-400 text-sm'>No timings available</p>
+                <p className='text-gray-400 text-sm'>No timings available for this date</p>
               )}
             </div>
+
+            {/* Legend */}
+            {selectedTime && (
+              <div className='mt-8 space-y-2 border-t border-white/10 pt-6'>
+                <p className='text-gray-400 text-xs font-semibold uppercase tracking-widest mb-3'>Legend</p>
+                <div className='flex items-center gap-3 text-sm text-gray-300'>
+                  <div className='h-5 w-5 rounded border border-[#FF4D67]/60' />
+                  <span>Available</span>
+                </div>
+                <div className='flex items-center gap-3 text-sm text-gray-300'>
+                  <div className='h-5 w-5 rounded bg-[#FF4D67] border border-[#FF4D67]' />
+                  <span>Selected</span>
+                </div>
+                <div className='flex items-center gap-3 text-sm text-gray-300'>
+                  <div className='h-5 w-5 rounded bg-gray-700 border border-gray-600' />
+                  <span>Occupied</span>
+                </div>
+              </div>
+            )}
+
+            {/* Selected seats summary */}
+            {selectedSeats.length > 0 && (
+              <div className='mt-6 border-t border-white/10 pt-6'>
+                <p className='text-gray-400 text-xs font-semibold uppercase tracking-widest mb-2'>Selected</p>
+                <p className='text-white font-semibold text-sm'>{selectedSeats.join(', ')}</p>
+                <p className='text-[#FF4D67] font-bold mt-2 text-lg'>{selectedSeats.length} seat{selectedSeats.length > 1 ? 's' : ''}</p>
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Seat map */}
         <div className='flex-1 flex flex-col items-center'>
-          
+
           <div className='mb-10 w-full'>
-            <h1 className='text-4xl font-bold tracking-tight'>{show.movie.title}</h1>
+            <h1 className='text-4xl font-bold tracking-tight'>{movie?.title}</h1>
             <p className='text-gray-400 mt-2 text-lg'>Select your preferred seats</p>
           </div>
 
@@ -118,37 +242,38 @@ const SeatLayout = () => {
             <p className='text-gray-500 text-[10px] tracking-[0.5em] uppercase font-bold'>SCREEN SIDE</p>
           </div>
 
-          
           <div className='flex flex-col gap-8 select-none'>
-           
+
+            {/* Rows A–B */}
             <div className='flex flex-col gap-2 items-center'>
-              {renderSeatBlock('A', 1, 9)}
-              {renderSeatBlock('B', 1, 9)}
+              {renderSeats('A')}
+              {renderSeats('B')}
             </div>
 
+            {/* Rows C–F */}
             <div className='flex flex-col gap-2'>
               <div className='flex gap-8 md:gap-12'>
                 <div className='flex flex-col gap-2'>
-                  {renderSeatBlock('C', 1, 9)}
-                  {renderSeatBlock('D', 1, 9)}
+                  {renderSeats('C')}
+                  {renderSeats('D')}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  {renderSeatBlock('E', 1, 9)}
-                  {renderSeatBlock('F', 1, 9)}
+                  {renderSeats('E')}
+                  {renderSeats('F')}
                 </div>
               </div>
             </div>
 
-
+            {/* Rows G–J */}
             <div className='flex flex-col gap-2'>
               <div className='flex gap-8 md:gap-12'>
                 <div className='flex flex-col gap-2'>
-                  {renderSeatBlock('G', 1, 9)}
-                  {renderSeatBlock('H', 1, 9)}
+                  {renderSeats('G')}
+                  {renderSeats('H')}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  {renderSeatBlock('I', 1, 9)}
-                  {renderSeatBlock('J', 1, 9)}
+                  {renderSeats('I')}
+                  {renderSeats('J')}
                 </div>
               </div>
             </div>
@@ -156,12 +281,16 @@ const SeatLayout = () => {
           </div>
 
           <div className='mt-16 w-full flex justify-center pb-10'>
-            <button onClick={()=> navigate('/my-bookings')}className='bg-[#FF4D67] hover:bg-[#e63e58] text-white px-14 py-4 rounded-full flex items-center gap-3 font-bold transition-all active:scale-95 shadow-xl shadow-[#FF4D67]/30'>
-              Proceed to checkout
+            <button
+              onClick={handleCheckout}
+              disabled={bookingLoading || selectedSeats.length === 0}
+              className='bg-[#FF4D67] hover:bg-[#e63e58] disabled:opacity-50 disabled:cursor-not-allowed text-white px-14 py-4 rounded-full flex items-center gap-3 font-bold transition-all active:scale-95 shadow-xl shadow-[#FF4D67]/30'
+            >
+              {bookingLoading ? 'Booking...' : 'Proceed to checkout'}
               <ChevronRight className='w-5 h-5' />
             </button>
           </div>
-          
+
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BlurCircle from "./BlurCircle";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
+import isoTimeFormat from '../lib/isoTimeFormat'
 
 const DataSelect = ({ dateTime = {}, movieId }) => {
   const navigate = useNavigate();
@@ -34,9 +35,7 @@ const DataSelect = ({ dateTime = {}, movieId }) => {
       return;
     }
 
-    navigate(
-      `/movies/${movieId}/date?showId=${selectedShow.showId}`
-    );
+    navigate(`/movies/${movieId}/date?date=${selectedDate}&showId=${selectedShow.showId}`)
 
     window.scrollTo(0, 0);
   };
@@ -108,10 +107,7 @@ const DataSelect = ({ dateTime = {}, movieId }) => {
                     : "bg-primary/20 hover:bg-primary/30"
                 }`}
               >
-                {new Date(show.time).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                {isoTimeFormat(show.time)}
               </button>
             ))}
           </div>

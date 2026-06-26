@@ -1,22 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { dummyBookingData } from '../assets/assets';
 import Loading from '../components/Loading';
 import BlurCircle from '../components/BlurCircle';
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURRENCY || '$';
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const {axios, getToken, user,  image_base_url} = useAppContext()
+    
   const getMyBookings = async () => {
-    setBookings(dummyBookingData);
-    setIsLoading(false);
+    try {
+
+      const {data} = await axios.get('/api/user/bookings', {headers: {
+        Authorization: `Bearer ${await getToken()}`}})
+
+        if(data.success)
+        {
+          setBookings(data.bookings)
+        }
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+
+    setIsLoading(false)
   };
 
   useEffect(() => {
-    getMyBookings();
-  }, []);
+
+    if(user)
+    {
+        getMyBookings();
+    }
+    
+  }, [user]);
 
   return !isLoading ? (
     <div className='relative px-6 md:px-12 lg:px-24 pt-32 md:pt-40 min-h-screen text-white bg-black overflow-hidden'>
@@ -36,7 +57,7 @@ const MyBookings = () => {
               
               <div className='w-full sm:w-40 md:w-44 shrink-0 aspect-[2/3] sm:aspect-auto'>
                 <img 
-                  src={item.show.movie.poster_path} 
+                  src={image_base_url + item.show.movie.poster_path} 
                   alt={item.show.movie.title} 
                   className='w-full h-full object-cover'
                 />

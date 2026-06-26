@@ -1,5 +1,6 @@
 
 import Show from "../models/Show.js"
+import Booking from "../models/Booking.js" 
 
 const checkSeatsAvailability = async(showId, selectedSeats) =>
 {
@@ -29,7 +30,7 @@ export const createBooking = async (req, res) =>
 {
     try 
     {
-        const {userId} = req.auth();
+        const { userId } = await req.auth()
         const {showId, selectedSeats} = req.body;
         const {origin} = req.headers;
 
@@ -44,7 +45,7 @@ export const createBooking = async (req, res) =>
         const booking = await Booking.create({
             user: userId, 
             show: showId, 
-            amount: showData.price * selectedSeats.length, 
+            amount: showData.showPrice * selectedSeats.length,
             bookedSeats: selectedSeats
         });
 
