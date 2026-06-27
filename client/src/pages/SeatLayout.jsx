@@ -9,15 +9,14 @@ import { useAppContext } from '../context/AppContext'
 
 const SeatLayout = () => {
 
-  const { id: movieId } = useParams()                      // movieId from /movies/:id/date
+  const { id: movieId } = useParams()                      
   const [searchParams] = useSearchParams()
   const date = searchParams.get('date')      
-  const showIdFromUrl = searchParams.get('showId')              // date from ?date=2025-01-15
-
+  const showIdFromUrl = searchParams.get('showId')             
   const [selectedSeats, setSelectedSeats] = useState([])
-  const [selectedTime, setSelectedTime] = useState(null)   // { time, showId }
+  const [selectedTime, setSelectedTime] = useState(null)   
   const [movie, setMovie] = useState(null)
-  const [dateTime, setDateTime] = useState({})             // { "2025-01-15": [{time, showId}] }
+  const [dateTime, setDateTime] = useState({})             
   const [occupiedSeats, setOccupiedSeats] = useState([])
   const [loading, setLoading] = useState(true)
   const [bookingLoading, setBookingLoading] = useState(false)
@@ -25,7 +24,6 @@ const SeatLayout = () => {
   const navigate = useNavigate()
   const { axios, user, getToken  } = useAppContext()
 
-  // Fetch movie + show timings
   const getShow = async () => {
   try {
     setLoading(true)
@@ -34,7 +32,6 @@ const SeatLayout = () => {
       setMovie(data.movie)
       setDateTime(data.dateTime)
 
-      // Auto-select the time the user picked on the previous page
       if (showIdFromUrl && data.dateTime[date]) {
         const preSelected = data.dateTime[date].find(
           item => item.showId === showIdFromUrl
@@ -53,7 +50,7 @@ const SeatLayout = () => {
   }
 }
 
-  // Fetch occupied seats whenever selected time changes
+  
   const getOccupiedSeats = async (showId) => {
     try {
       const { data } = await axios.get(`/api/booking/seats/${showId}`)
@@ -67,7 +64,7 @@ const SeatLayout = () => {
 
   const handleTimeSelect = (item) => {
     setSelectedTime(item)
-    setSelectedSeats([])                                   // reset seats on time change
+    setSelectedSeats([])                                  
     getOccupiedSeats(item.showId)
   }
 
@@ -75,7 +72,7 @@ const SeatLayout = () => {
     if (!selectedTime) {
       return toast('Please select a time first')
     }
-    if (occupiedSeats.includes(seatId)) return            // already booked, ignore
+    if (occupiedSeats.includes(seatId)) return            
 
     if (!selectedSeats.includes(seatId) && selectedSeats.length >= 5) {
       return toast('You can only select up to 5 seats')
@@ -108,14 +105,13 @@ const SeatLayout = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${await getToken()}`  // ✅ add this
+            Authorization: `Bearer ${await getToken()}`  
           }
         }
       )
 
       if (data.success) {
-        toast.success('Booking confirmed!')
-        navigate('/my-bookings')
+        window.location.href = data.url;
       } else {
         toast.error(data.error || 'Booking failed')
       }
