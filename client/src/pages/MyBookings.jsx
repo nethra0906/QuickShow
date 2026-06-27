@@ -93,9 +93,9 @@ const MyBookings = () => {
                     <div className='flex sm:flex-col items-center sm:items-end gap-3 sm:gap-1.5 justify-between'>
                       <p className='text-2xl font-black text-white'>{currency}{item.amount}</p>
                       {!item.isPaid && (
-                        <button className='bg-[#FF4D67] hover:bg-[#e63e58] text-white px-4 py-1.5 text-xs rounded-full font-bold transition-all duration-200 active:scale-95 shadow-md shadow-[#FF4D67]/20 cursor-pointer'>
+                        <Link to = {item.paymentLink} className='bg-[#FF4D67] hover:bg-[#e63e58] text-white px-4 py-1.5 text-xs rounded-full font-bold transition-all duration-200 active:scale-95 shadow-md shadow-[#FF4D67]/20 cursor-pointer'>
                           Pay Now
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>
