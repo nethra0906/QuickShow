@@ -12,7 +12,6 @@ const Favourite = () => {
     
     <div className="relative min-h-screen bg-black text-white overflow-hidden pt-32 pb-24 px-6 md:px-12 lg:px-20 xl:px-32">
 
-      {/* Background Blur */}
       <BlurCircle
         top="10%"
         left="-100px"
@@ -27,7 +26,6 @@ const Favourite = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto">
 
-        {/* Heading */}
         <div className="mb-12 border-b border-white/10 pb-5">
           
           <h1 className="text-4xl font-black tracking-tight">
@@ -39,7 +37,6 @@ const Favourite = () => {
           </p>
         </div>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
           
           {favoriteMovies.map((movie) => (

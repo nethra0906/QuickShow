@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="px-6 md:px-16 lg:px-36 mt-16 w-full text-gray-300">
       <div className="flex flex-col md:flex-row justify-between items-start w-full gap-10 border-b border-gray-500 pb-14">
-        {/* Left Side: Brand and App Links */}
+
         <div className="md:max-w-xl">
           <img alt="QuickShow Logo" className="h-11" src={assets.logo} />
           <p className="mt-6 text-sm leading-relaxed text-gray-400">
@@ -19,7 +19,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Right Side: Contact Info */}
         <div className="md:text-right min-w-[150px]">
           <h2 className="font-semibold text-white mb-4 tracking-wider uppercase text-xs">Get in touch</h2>
           <a 
@@ -31,7 +30,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Copyright */}
+
       <p className="pt-6 text-center text-xs text-gray-500 pb-6">
         Copyright {new Date().getFullYear()} © QuickShow. All Rights Reserved.
       </p>

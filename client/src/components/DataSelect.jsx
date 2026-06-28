@@ -8,7 +8,6 @@ import isoTimeFormat from '../lib/isoTimeFormat'
 const DataSelect = ({ dateTime = {}, movieId }) => {
   const navigate = useNavigate();
 
-  // Convert backend object into array
   const dates = useMemo(() => {
     return Object.keys(dateTime).map((date) => ({
       date,
@@ -47,7 +46,6 @@ const DataSelect = ({ dateTime = {}, movieId }) => {
         <BlurCircle top="-100px" left="-100px" />
         <BlurCircle top="100px" right="-50px" />
 
-        {/* Date */}
 
         <div>
           <p className="text-lg font-semibold">Choose Date</p>
@@ -91,7 +89,6 @@ const DataSelect = ({ dateTime = {}, movieId }) => {
           </div>
         </div>
 
-        {/* Time */}
 
         <div>
           <p className="text-lg font-semibold">Choose Time</p>

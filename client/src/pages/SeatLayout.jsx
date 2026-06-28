@@ -158,7 +158,6 @@ const SeatLayout = () => {
     if (movieId) getShow()
   }, [movieId])
 
-  // Timings for the selected date
   const timingsForDate = date && dateTime[date] ? dateTime[date] : []
 
   if (loading) return <Loading />
@@ -170,7 +169,6 @@ const SeatLayout = () => {
 
       <div className='flex flex-col lg:flex-row gap-10'>
 
-        {/* Timings sidebar */}
         <div className='lg:w-72 w-full'>
           <div className='bg-[#1A1015] border border-[#FF4D67]/20 rounded-2xl p-6 sticky top-28'>
             <h2 className='text-2xl font-bold mb-6'>Available Timings</h2>
@@ -194,7 +192,6 @@ const SeatLayout = () => {
               )}
             </div>
 
-            {/* Legend */}
             {selectedTime && (
               <div className='mt-8 space-y-2 border-t border-white/10 pt-6'>
                 <p className='text-gray-400 text-xs font-semibold uppercase tracking-widest mb-3'>Legend</p>
@@ -213,7 +210,6 @@ const SeatLayout = () => {
               </div>
             )}
 
-            {/* Selected seats summary */}
             {selectedSeats.length > 0 && (
               <div className='mt-6 border-t border-white/10 pt-6'>
                 <p className='text-gray-400 text-xs font-semibold uppercase tracking-widest mb-2'>Selected</p>
@@ -224,7 +220,6 @@ const SeatLayout = () => {
           </div>
         </div>
 
-        {/* Seat map */}
         <div className='flex-1 flex flex-col items-center'>
 
           <div className='mb-10 w-full'>
@@ -240,13 +235,12 @@ const SeatLayout = () => {
 
           <div className='flex flex-col gap-8 select-none'>
 
-            {/* Rows A–B */}
             <div className='flex flex-col gap-2 items-center'>
               {renderSeats('A')}
               {renderSeats('B')}
             </div>
 
-            {/* Rows C–F */}
+  
             <div className='flex flex-col gap-2'>
               <div className='flex gap-8 md:gap-12'>
                 <div className='flex flex-col gap-2'>
@@ -260,7 +254,6 @@ const SeatLayout = () => {
               </div>
             </div>
 
-            {/* Rows G–J */}
             <div className='flex flex-col gap-2'>
               <div className='flex gap-8 md:gap-12'>
                 <div className='flex flex-col gap-2'>

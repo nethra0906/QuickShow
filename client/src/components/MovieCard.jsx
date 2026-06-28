@@ -29,7 +29,6 @@ const MovieCard = ({ movie }) => {
   return (
     <div className="bg-[#1B2433] rounded-3xl overflow-hidden p-5 w-full max-w-[320px] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/10">
       
-      {/* Movie Poster */}
       <img
         src={image_base_url + image}
         alt={movie.title}
@@ -40,7 +39,6 @@ const MovieCard = ({ movie }) => {
         }}
       />
 
-      {/* Movie Info */}
       <div className="mt-5">
         <h2 className="text-white text-2xl font-bold line-clamp-1">
           {movie.title}
