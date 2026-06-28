@@ -7,8 +7,6 @@ export const inngest = new Inngest({
   id: "movie-ticket-booking",
 });
 
-// ================= CREATE USER =================
-
 const syncUserCreation = inngest.createFunction(
   {
     id: "sync-user-from-clerk",
@@ -41,7 +39,6 @@ const syncUserCreation = inngest.createFunction(
   }
 );
 
-// ================= DELETE USER =================
 
 const syncUserDeletion = inngest.createFunction(
   {
@@ -64,7 +61,6 @@ const syncUserDeletion = inngest.createFunction(
   }
 );
 
-// ================= UPDATE USER =================
 
 const syncUserUpdation = inngest.createFunction(
   {
@@ -101,7 +97,6 @@ const syncUserUpdation = inngest.createFunction(
   }
 );
 
-// ================= RELEASE SEATS IF PAYMENT FAILS =================
 
 const releaseSeatsAndDeleteBooking = inngest.createFunction(
   {
@@ -111,7 +106,6 @@ const releaseSeatsAndDeleteBooking = inngest.createFunction(
     },
   },
   async ({ event, step }) => {
-    // Wait 10 minutes
     const tenMinutesLater = new Date(Date.now() + 10 * 60 * 1000);
 
     await step.sleepUntil(
@@ -121,7 +115,6 @@ const releaseSeatsAndDeleteBooking = inngest.createFunction(
 
     await step.run("check-payment-status", async () => {
       const bookingId = event.data.bookingId;
-
       const booking = await Booking.findById(bookingId);
 
       if (!booking) {
@@ -129,7 +122,6 @@ const releaseSeatsAndDeleteBooking = inngest.createFunction(
         return;
       }
 
-      // Booking already paid
       if (booking.isPaid) {
         console.log("Payment completed.");
         return;
@@ -156,7 +148,6 @@ const releaseSeatsAndDeleteBooking = inngest.createFunction(
   }
 );
 
-// ================= EXPORT =================
 
 export const functions = [
   syncUserCreation,
