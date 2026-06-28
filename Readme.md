@@ -1,6 +1,6 @@
 # QuickShow - Full Stack Movie Ticket Booking Platform
 
-QuickShow is a production-ready full-stack web application engineered to simulate a real-world movie ticket booking system[cite: 1]. The platform seamlessly pairs a highly responsive, cinematic frontend interface with a scalable backend microservice architecture capable of managing movies, granular seat configurations, user profiles, and concurrent showtime reservations[cite: 1].
+QuickShow is a production-ready full-stack web application engineered to simulate a real-world movie ticket booking system. The platform seamlessly pairs a highly responsive, cinematic frontend interface with a scalable backend microservice architecture capable of managing movies, granular seat configurations, user profiles, and concurrent showtime reservations.
 
 ---
 
